@@ -115,4 +115,15 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin / contact notifications
+    |--------------------------------------------------------------------------
+    |
+    | API contact submissions (POST /api/contact-message) notify this address.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
+
 ];
