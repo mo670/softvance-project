@@ -37,20 +37,25 @@ class ContactMessageController extends Controller
                 ]);
             });
 
+            $mailSent = true;
             $adminEmail = config('mail.admin_email');
             if (is_string($adminEmail) && $adminEmail !== '') {
                 try {
                     Mail::to($adminEmail)->send(new ContactFormMail($contact));
                 } catch (\Throwable $e) {
-                    report($e);
+                    $mailSent = false;
+                    Log::error('Contact saved but email delivery failed: '.$e->getMessage());
                 }
             }
 
             return response()->json([
-                'success' => true,
-                'message' => 'Message sent successfully!',
+                'success' => $mailSent,
+                'message' => $mailSent
+                    ? 'Message sent successfully!'
+                    : 'Message saved, but email delivery failed. Please check mail configuration.',
                 'data' => $contact,
-            ], 201);
+                'mail_sent' => $mailSent,
+            ], $mailSent ? 201 : 202);
         } catch (\Throwable $e) {
             Log::error('Contact form submission failed: '.$e->getMessage());
 

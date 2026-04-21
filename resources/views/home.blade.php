@@ -151,6 +151,7 @@
 
     const alertBox = document.getElementById('contactApiAlert');
     const submitBtn = document.getElementById('contactSubmitBtn');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
     function showAlert(type, text) {
         alertBox.className = 'alert alert-' + type;
@@ -182,6 +183,8 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
                 },
                 body: JSON.stringify(payload),
             });
